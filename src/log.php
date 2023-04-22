@@ -2,7 +2,7 @@
 declare( strict_types = 1 );
 
 class Log {
-	public $stringify = 'stringify_var_export';
+	public $stringify = 'stringify_print_r';
 
 	public function __construct() {
 	}
@@ -15,6 +15,11 @@ class Log {
 		);
 
 		return $response;
+	}
+
+	public function stringify_print_r( $msg ) {
+		$out = print_r( $msg, true );
+		return $out;
 	}
 
 	public function stringify_var_export( $msg ) {
