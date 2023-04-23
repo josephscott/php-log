@@ -9,7 +9,6 @@ class Log {
 
 	public static function php( $data ) {
 		$out = self::parse( $data );
-		print_r( $data ); echo "\n\n";
 		error_log( $out );
 	}
 
