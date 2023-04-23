@@ -7,42 +7,44 @@ class Log {
 	public function __construct() {
 	}
 
-	public static function __callStatic( string $method, array $args ) {
-		$log = new Log();
-		$response = $log->send(
-			to: $method,
-			msg: $args[0]
-		);
-
-		return $response;
+	public static function php( $data ) {
+		$out = self::parse( $data );
+		print_r( $data ); echo "\n\n";
+		error_log( $out );
 	}
 
-	public function stringify_print_r( $msg ) {
-		$out = print_r( $msg, true );
+	public static function parse( $data, $level = 0 ) {
+		$out = '';
+
+		$type = strtolower( gettype( $data ) );
+		switch( $type ) {
+			case 'null':
+			case 'boolean':
+			case 'integer':
+			case 'double':
+			case 'string':
+			case 'resource':
+				$out .= self::add_simple( $type, $data, $level ); 
+				break;
+		}
+
 		return $out;
 	}
 
-	public function stringify_var_export( $msg ) {
-		$out = var_export( $msg, true );
+	public static function add_simple( $type, $data, $level ) {
+		if ( $type === 'boolean' ) {
+			$data = 'false';
+			if ( $data === true ) {
+				$data = 'true';
+			}
+		}
+
+		if ( $type === 'resource' ) {
+			$resource = get_resource_type( $data );
+			$type .= ", $resource";
+		}
+
+		$out = str_repeat( ' ', $level * 4 ) . "($type) $data\n";
 		return $out;
-	}
-
-	public function send( string $to, $msg ) {
-		$response = [
-			'error' => false,
-			'msg' => ''
-		];
-
-		$make_string = $this->stringify;
-		$msg = $this->$make_string( $msg );
-
-		$to = "send_$to";
-		$response['error'] = $this->$to( $msg );
-
-		return $response;
-	}
-
-	public function send_php( $msg ) {
-		return error_log( $msg, 0 );
 	}
 }
