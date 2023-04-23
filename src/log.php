@@ -55,7 +55,7 @@ class Log {
 		$level++;
 
 		foreach( $data as $k => $v ) {
-			$out .= str_repeat( ' ', $level * 4 ) . "$k => "
+			$out .= str_repeat( ' ', $level * 4 ) . "[$k] => "
 				. ltrim( self::parse( $v, $level ) );
 		}
 
