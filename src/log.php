@@ -25,6 +25,9 @@ class Log {
 			case 'resource':
 				$out .= self::add_simple( $type, $data, $level ); 
 				break;
+			case 'array':
+				$out .= self::add_array( $data, $level );
+				break;
 		}
 
 		return $out;
@@ -44,6 +47,20 @@ class Log {
 		}
 
 		$out = str_repeat( ' ', $level * 4 ) . "($type) $data\n";
+		return $out;
+	}
+
+	public static function add_array( $data, $level ) {
+		$out = str_repeat( ' ', $level * 4 ) . "(array) [\n";
+		$level++;
+
+		foreach( $data as $k => $v ) {
+			$out .= str_repeat( ' ', $level * 4 ) . "$k => "
+				. ltrim( self::parse( $v, $level ) );
+		}
+
+		$level--;
+		$out .= str_repeat( ' ', $level * 4 ) . "]\n";
 		return $out;
 	}
 }
