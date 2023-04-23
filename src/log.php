@@ -2,10 +2,7 @@
 declare( strict_types = 1 );
 
 class Log {
-	public $stringify = 'stringify_print_r';
-
-	public function __construct() {
-	}
+	public function __construct() { }
 
 	public static function php( $data ) {
 		$out = self::parse( $data );
