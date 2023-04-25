@@ -25,6 +25,9 @@ class Log {
 			case 'array':
 				$out .= self::add_array( $data, $level );
 				break;
+			case 'object':
+				$out .= self::add_object( $data, $level );
+				break;
 		}
 
 		return $out;
@@ -58,6 +61,40 @@ class Log {
 
 		$level--;
 		$out .= str_repeat( ' ', $level * 4 ) . "]\n";
+		return $out;
+	}
+
+	public static function add_object( $data, $level ) {
+		$out = str_repeat( ' ', $level * 4 ) . get_class( $data ) . " (object) {\n";
+		$level++;
+
+		$reflect = new ReflectionObject( $data );
+
+		foreach ( $reflect->getProperties() as $k => $v ) {
+			$name = $v->getName();
+
+			if ( $v->isStatic() ) {
+				$name .= ':static';
+			}
+			if ( $v->isReadOnly() ) {
+				$name .= ':readonly';
+			}
+
+			if ( $v->isPrivate() ) {
+				$name .= ':private';
+			} elseif ( $v->isProtected() ) {
+				$name .= ':protected';
+			} elseif ( $v->isPublic() ) {
+				$name .= ':public';
+			}
+
+			$out .= str_repeat( ' ', $level * 4 ) . "[$name] => "
+				. ltrim( self::parse( $v->getValue( $data ), $level ) );
+		}
+
+
+		$level--;
+		$out .= str_repeat( ' ', $level * 4 ) . "}\n";
 		return $out;
 	}
 }
