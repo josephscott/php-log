@@ -9,6 +9,11 @@ class Log {
 		error_log( $out );
 	}
 
+	public static function file( $data, $file ) {
+		$out = self::parse( $data );
+		error_log( $out, 3, $file );
+	}
+
 	public static function parse( $data, $level = 0 ) {
 		$out = '';
 
