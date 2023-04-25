@@ -67,7 +67,6 @@ class Log {
 	public static function add_object( $data, $level ) {
 		$out = str_repeat( ' ', $level * 4 ) . get_class( $data ) . " (object) {\n";
 		$level++;
-
 		$reflect = new ReflectionObject( $data );
 
 		foreach ( $reflect->getProperties() as $k => $v ) {
@@ -92,6 +91,12 @@ class Log {
 				. ltrim( self::parse( $v->getValue( $data ), $level ) );
 		}
 
+		foreach ( $reflect->getMethods() as $k => $v ) {
+			$name = $v->getName();
+
+			$out .= str_repeat( ' ', $level * 4 ) . "[$name] => "
+				. ltrim( "(method)\n" );
+		}
 
 		$level--;
 		$out .= str_repeat( ' ', $level * 4 ) . "}\n";
