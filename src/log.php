@@ -96,12 +96,14 @@ class Log {
 				. ltrim( self::parse( $v->getValue( $data ), $level ) );
 		}
 
+/*
 		foreach ( $reflect->getMethods() as $k => $v ) {
 			$name = $v->getName();
 
 			$out .= str_repeat( ' ', $level * 4 ) . "[$name] => "
 				. ltrim( "(method)\n" );
 		}
+ */
 
 		$level--;
 		$out .= str_repeat( ' ', $level * 4 ) . "}\n";
