@@ -40,9 +40,10 @@ class Log {
 
 	public static function add_simple( $type, $data, $level ) {
 		if ( $type === 'boolean' ) {
-			$data = 'false';
 			if ( $data === true ) {
 				$data = 'true';
+			} else {
+				$data = 'false';
 			}
 		}
 
