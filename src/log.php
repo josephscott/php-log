@@ -60,7 +60,7 @@ class Log {
 		$level++;
 
 		foreach( $data as $k => $v ) {
-			$out .= str_repeat( ' ', $level * 4 ) . "[$k] => "
+			$out .= str_repeat( ' ', $level * 4 ) . "$k => "
 				. ltrim( self::parse( $v, $level ) );
 		}
 
@@ -92,7 +92,7 @@ class Log {
 				$name .= ':public';
 			}
 
-			$out .= str_repeat( ' ', $level * 4 ) . "[$name] => "
+			$out .= str_repeat( ' ', $level * 4 ) . "$name => "
 				. ltrim( self::parse( $v->getValue( $data ), $level ) );
 		}
 
