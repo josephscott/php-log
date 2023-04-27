@@ -71,7 +71,7 @@ class Log {
 	}
 
 	public static function add_object( $data, $level ) {
-		$out = str_repeat( ' ', $level * 4 ) . get_class( $data ) . " (object) {\n";
+		$out = str_repeat( ' ', $level * 4 ) . "(object) " . get_class( $data ) . " {\n";
 		$level++;
 		$reflect = new ReflectionObject( $data );
 
