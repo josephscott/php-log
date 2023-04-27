@@ -10,7 +10,8 @@ class Log {
 	}
 
 	public static function file( $data, $file ) {
-		$out = self::parse( $data );
+		$out = '[' . date( 'd-M-Y H:i:s e' ) . '] ';
+		$out .= self::parse( $data );
 		error_log( $out, 3, $file );
 	}
 
