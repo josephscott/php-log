@@ -2,20 +2,45 @@
 declare( strict_types = 1 );
 
 class Log {
+	public static $format = 'better_print_r';
+	public static $available_formats = [
+		'better_print_r',
+		'print_r'
+	];
+
 	public function __construct() { }
 
 	public static function php( $data ) {
-		$out = self::parse( $data );
+		$parser = self::get_format();
+
+		$out = self::$parser( $data );
 		error_log( $out );
 	}
 
 	public static function file( $data, $file ) {
+		$parser = self::get_format();
+
 		$out = '[' . date( 'd-M-Y H:i:s e' ) . '] ';
-		$out .= self::parse( $data );
+		$out .= self::$parser( $data );
 		error_log( $out, 3, $file );
 	}
 
-	public static function parse( $data, $level = 0 ) {
+	public static function get_format() {
+		$parser = self::$format;
+
+		if ( !in_array( $parser, self::$available_formats, true ) ) {
+			$parser = 'better_print_r';
+		}
+
+		return $parser;
+	}
+
+	public static function print_r( $data ) {
+		$out = print_r( $data, true );
+		return $out;
+	}
+
+	public static function better_print_r( $data, $level = 0 ) {
 		$out = '';
 
 		$type = strtolower( gettype( $data ) );
@@ -63,7 +88,7 @@ class Log {
 
 		foreach( $data as $k => $v ) {
 			$out .= str_repeat( ' ', $level * 4 ) . "$k => "
-				. ltrim( self::parse( $v, $level ) );
+				. ltrim( self::better_print_r( $v, $level ) );
 		}
 
 		$level--;
@@ -95,7 +120,7 @@ class Log {
 			}
 
 			$out .= str_repeat( ' ', $level * 4 ) . "$name => "
-				. ltrim( self::parse( $v->getValue( $data ), $level ) );
+				. ltrim( self::better_print_r( $v->getValue( $data ), $level ) );
 		}
 
 		$level--;
